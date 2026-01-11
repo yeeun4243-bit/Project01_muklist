@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'login_processing_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
-
-enum LoginProvider { kakao, google, apple }
 
 /// 앱의 시작점
 class MyApp extends StatelessWidget {
@@ -137,62 +142,6 @@ class StartLoginPage extends StatelessWidget {
   static void _showSnack(BuildContext context, String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(msg)),
-    );
-  }
-}
-
-
-class LoginProcessingPage extends StatelessWidget {
-  final LoginProvider provider;
-  const LoginProcessingPage({super.key, required this.provider});
-
-  String get providerName {
-    switch (provider) {
-      case LoginProvider.kakao:
-        return '카카오';
-      case LoginProvider.google:
-        return '구글';
-      case LoginProvider.apple:
-        return '애플';
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('$providerName 로그인'),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const CircularProgressIndicator(),
-              const SizedBox(height: 16),
-              Text(
-                '$providerName 로그인 중...',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                '다음 단계에서 실제 로그인 기능을 연결할 거예요.',
-                style: TextStyle(color: Colors.black54),
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: OutlinedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('뒤로가기'),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
